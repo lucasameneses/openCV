@@ -8,11 +8,12 @@ def onChange(value):
     pass
 
 
-img = cv2.imread("test.jpg")
+img = cv2.imread("test.jpg",cv2.IMREAD_GRAYSCALE)
 copy_img = img.copy()
 
 # Edge
-# copy_img = cv2.Canny(copy_img, 1000,1000)
+edge_img = cv2.Canny(copy_img, 100,400)
+cv2.imwrite('edge.jpg',edge_img)
 
 windowTitle = "Ajuste de Brilho e Contraste"
 cv2.namedWindow(windowTitle)
@@ -37,8 +38,6 @@ counter_time = 0
 while True:
     current_contrast = cv2.getTrackbarPos("contraste", windowTitle)
     current_brightness = cv2.getTrackbarPos("brilho", windowTitle)
-    min_hue = cv2.getTrackbarPos("min Hue", windowTitle)
-    max_hue = cv2.getTrackbarPos("max Hue", windowTitle)
 
     if before_contrast != current_contrast:
         update_contrast = True
@@ -73,7 +72,12 @@ while True:
     # Edge
     # copy_img = cv2.Canny(copy_img, 0, 200)
 
-    cv2.imshow(windowTitle, copy_img)
+    # LUT
+    lut_img = cv2.applyColorMap(copy_img,cv2.COLORMAP_RAINBOW)
+    cv2.imwrite('lut.jpg',lut_img)
+    
+
+    cv2.imshow(windowTitle, edge_img)
 
     keyPressed = cv2.waitKey(1) & 0xFF
     if keyPressed == 27:
